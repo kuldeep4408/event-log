@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <script
+      src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+      integrity="sha256-k2WSCIexGzOj3Euiig+TlR8gA0EmPjuc79OEeY5L45g="
+      crossorigin="anonymous"
+    ></script>
+
+    <script src="event.js"></script>
+    <title>sample</title>
+  </head>
+  <body>
+    <h1>Click the button</h1>
+    <button type="button">Me!</button>
+
+    <script>
+      const events = new Events();
+      events.on("click", () => {
+        console.log("Hello");
+      });
+
+      events.on("click", () => {
+        console.log("There!");
+      });
+
+      $("button").on("click", (e) => {
+        e.preventDefault();
+        events.trigger("click", async (eventName) => {
+          await fetch("http://localhost:4848/submit", {
+            method: "post",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              event: eventName,
+              time: new Date(),
+            }),
+          });
+        });
+        events.off("click");
+      });
+    </script>
+  </body>
+</html>
